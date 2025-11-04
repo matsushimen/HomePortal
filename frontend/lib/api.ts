@@ -11,7 +11,8 @@ async function resolveAuthToken(): Promise<string | null> {
   }
   try {
     const { cookies } = await import("next/headers");
-    return cookies().get("homeportal_token")?.value ?? null;
+    const cookieStore = await cookies();
+    return cookieStore.get("homeportal_token")?.value ?? null;
   } catch (error) {
     return null;
   }
