@@ -21,7 +21,7 @@ def get_session() -> Generator[Session, None, None]:
 
 def get_current_user(
     token: str | None = Depends(oauth2_scheme),
-    request: Request = Depends(),
+    request: Request,
     session: Session = Depends(get_session),
 ) -> User:
     if not settings.app_auth_enabled:
