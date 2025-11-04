@@ -16,7 +16,7 @@ HomePortal は、家庭内のリンク・連絡先・資産・予定・ToDo を�
 | --- | --- | --- |
 | フロントエンド | Next.js 15, TypeScript, Tailwind CSS, SWR | App Router 構成、PWA ベース拡張が可能 |
 | バックエンド | FastAPI, SQLModel, SQLite, Alembic | JWT 認証・マイグレーション管理 |
-| インフラ | Docker Compose, Caddy, Cron | `frontend` / `backend` / `proxy` / `db` / `backup` の 5 サービス |
+| インフラ | Docker Compose, Cron | `frontend` / `backend` / `db` / `backup` の 4 サービス |
 | テスト | pytest, Playwright | GitHub Actions による自動検証 |
 
 ```
@@ -65,11 +65,6 @@ docker compose up backend frontend -d
 ポートが競合する場合は環境変数で上書きします。
 ```bash
 FRONTEND_PORT=3100 BACKEND_PORT=8100 docker compose up backend frontend -d
-```
-
-リバースプロキシを含めた構成で起動するには以下を利用してください。
-```bash
-docker compose up --profile proxy -d
 ```
 
 ### 認証を有効化する

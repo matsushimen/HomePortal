@@ -37,26 +37,6 @@ services:
     ports:
       - "${FRONTEND_PORT:-3000}:3000"
 
-  proxy:
-    image: caddy:2.7.6
-    restart: unless-stopped
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      - caddy-data:/data
-      - caddy-config:/config
-    ports:
-      - "${PROXY_HTTP_PORT:-8080}:80"
-      - "${PROXY_HTTPS_PORT:-8443}:443"
-    depends_on:
-      frontend:
-        condition: service_started
-      backend:
-        condition: service_started
-    networks:
-      - homeportal
-    profiles:
-      - proxy
-
   db:
     image: busybox:1.36
     command: sh -c "mkdir -p /data && sleep infinity"
@@ -83,8 +63,6 @@ services:
 volumes:
   db-data:
   uploads-data:
-  caddy-data:
-  caddy-config:
   backup-data:
 
 networks:
