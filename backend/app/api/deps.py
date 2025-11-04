@@ -20,9 +20,9 @@ def get_session() -> Generator[Session, None, None]:
 
 
 def get_current_user(
-    token: str | None = Depends(oauth2_scheme),
     request: Request,
     session: Session = Depends(get_session),
+    token: str | None = Depends(oauth2_scheme),
 ) -> User:
     if not settings.app_auth_enabled:
         default_user = session.exec(select(User).where(User.email == "default@local")).first()
