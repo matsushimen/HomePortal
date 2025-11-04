@@ -1,0 +1,20 @@
+const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb" />
+      <stop offset="100%" stop-color="#1d4ed8" />
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="24" fill="url(#grad)" />
+  <path d="M64 28L24 56v44h28V86h24v14h28V56L64 28z" fill="#f8fafc" />
+</svg>`;
+
+export function GET() {
+  return new Response(svgIcon, {
+    headers: {
+      "Content-Type": "image/svg+xml",
+      "Cache-Control": "public, max-age=31536000, immutable"
+    }
+  });
+}
+

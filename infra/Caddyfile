@@ -1,0 +1,33 @@
+:80 {
+	@api path /api/*, /healthz
+	handle @api {
+		reverse_proxy backend:8000
+	}
+
+	handle {
+		reverse_proxy frontend:3000
+	}
+
+	log {
+		output stdout
+		format console
+	}
+}
+
+:443 {
+	tls internal
+
+	@api path /api/*, /healthz
+	handle @api {
+		reverse_proxy backend:8000
+	}
+
+	handle {
+		reverse_proxy frontend:3000
+	}
+
+	log {
+		output stdout
+		format console
+	}
+}

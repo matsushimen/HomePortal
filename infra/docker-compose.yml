@@ -1,0 +1,92 @@
+services:
+  backend:
+    build:
+      context: ../backend
+    env_file:
+      - ../.env
+    environment:
+      DATABASE_URL: sqlite:////data/homeportal.db
+    volumes:
+      - db-data:/data
+      - uploads-data:/uploads
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+    depends_on:
+      db:
+        condition: service_started
+    networks:
+      - homeportal
+
+  frontend:
+    build:
+      context: ../frontend
+      args:
+        NEXT_PUBLIC_BACKEND_URL: ${NEXT_PUBLIC_BACKEND_URL:-http://localhost:8000}
+        BACKEND_URL: http://backend:8000
+    env_file:
+      - ../.env
+    environment:
+      NEXT_PUBLIC_BACKEND_URL: ${NEXT_PUBLIC_BACKEND_URL:-http://backend:8000}
+      BACKEND_URL: http://backend:8000
+      NEXT_PUBLIC_APP_AUTH_ENABLED: ${APP_AUTH_ENABLED:-false}
+    depends_on:
+      backend:
+        condition: service_started
+    networks:
+      - homeportal
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
+
+  proxy:
+    image: caddy:2.7.6
+    restart: unless-stopped
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    ports:
+      - "${PROXY_HTTP_PORT:-8080}:80"
+      - "${PROXY_HTTPS_PORT:-8443}:443"
+    depends_on:
+      frontend:
+        condition: service_started
+      backend:
+        condition: service_started
+    networks:
+      - homeportal
+    profiles:
+      - proxy
+
+  db:
+    image: busybox:1.36
+    command: sh -c "mkdir -p /data && sleep infinity"
+    volumes:
+      - db-data:/data
+    networks:
+      - homeportal
+
+  backup:
+    build:
+      context: ./backup
+    environment:
+      BACKUP_RETENTION: 7
+    volumes:
+      - db-data:/source/db:ro
+      - uploads-data:/source/uploads:ro
+      - backup-data:/var/backups/app
+    depends_on:
+      db:
+        condition: service_started
+    networks:
+      - homeportal
+
+volumes:
+  db-data:
+  uploads-data:
+  caddy-data:
+  caddy-config:
+  backup-data:
+
+networks:
+  homeportal:
+    driver: bridge

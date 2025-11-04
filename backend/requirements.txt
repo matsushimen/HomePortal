@@ -1,0 +1,12 @@
+fastapi>=0.110.0,<0.112.0
+uvicorn[standard]>=0.22.0,<0.28.0
+sqlmodel>=0.0.16,<0.0.20
+alembic>=1.12.1,<1.14.0
+pydantic-settings>=2.0.3,<2.4.0
+python-dotenv>=1.0.0,<1.1.0
+python-multipart>=0.0.6,<0.0.8
+passlib[bcrypt]>=1.7.4,<1.8.0
+bcrypt==3.2.2
+python-jose[cryptography]>=3.3.0,<3.4.0
+email-validator>=2.1.0,<2.2.0
+aiofiles>=23.0.0,<24.0.0
